@@ -200,9 +200,9 @@ jobs:
         if: ${{ inputs.ytclassic }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTClassicVideoQuality.git
 
-      - name: Clone YTClassicVideoQuality
-        if: ${{ inputs.ytclassic }}
-        run: git clone --quiet --depth=1 https://github.com/jkhsjdhjs/youtube-native-share
+      - name: Clone youtube-native-share
+        if: ${{ inputs.ytnativeshare }}
+        run: git clone --quiet --depth=1 https://github.com/jkhsjdhjs/youtube-native-share.git
 
       #- name: Clone iSponsorBlock
       #  run: git clone --quiet --depth=1 https://github.com/Galactic-Dev/iSponsorBlock.git
@@ -357,10 +357,18 @@ jobs:
           mv packages/*.deb ${{ github.workspace }}/noytpre.deb
 
       - name: Build YTClassicVideoQuality
+        if: ${{ inputs.ytclassic }}
         run: |
           cd YTClassicVideoQuality
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ytclassic.deb
+
+      - name: Build youtube-native-share
+        if: ${{ inputs.ytnativeshare }}
+        run: |
+          cd youtube-native-share
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytnativeshare.deb
 
       #- name: Build iSponsorBlock
       #  run: |
