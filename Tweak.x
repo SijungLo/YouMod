@@ -1,8 +1,6 @@
 // All Codes are adapt from YTLite and uYouEnhanced + Some of my research
 #import "Headers.h"
 
-#define isDarkMode2 ([[UIApplication sharedApplication] keyWindow].rootViewController.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
-
 Class YTILikeResponseClass, YTIDislikeResponseClass, YTIRemoveLikeResponseClass;
 
 // AccessGroupID
@@ -539,11 +537,11 @@ static BOOL isDarkMode(UIView *view) {
 
 // Hide Subbar
 %hook YTMySubsFilterHeaderView
-- (void)setChipFilterView:(id)arg1 { if (!(IS_ENABLED(HideSubbar))) %orig; }
+- (void)setChipFilterView:(id)arg1 { if (!IS_ENABLED(HideSubbar)) %orig; }
 %end
 
 %hook YTHeaderContentComboView
-- (void)enableSubheaderBarWithView:(id)arg1 { if (!(IS_ENABLED(HideSubbar))) %orig; }
+- (void)enableSubheaderBarWithView:(id)arg1 { if (!IS_ENABLED(HideSubbar)) %orig; }
 - (void)setFeedHeaderScrollMode:(int)arg1 { IS_ENABLED(HideSubbar) ? %orig(0) : %orig; }
 %end
 
@@ -784,16 +782,12 @@ static BOOL isDarkMode(UIView *view) {
 // YTClassicVideoQuality (https://github.com/PoomSmart/YTClassicVideoQuality)
 %group OldVideoQuality
 %hook YTIMediaQualitySettingsHotConfig
-
 %new(B@:)
 - (BOOL)enableQuickMenuVideoQualitySettings { return NO; }
-
 %end
 
 %hook YTVideoQualitySwitchOriginalController
-
 %property (retain, nonatomic) YTVideoQualitySwitchRedesignedController *redesignedController;
-
 - (void)setUserSelectableFormats:(NSArray <MLFormat *> *)formats {
     if (self.redesignedController == nil)
         self.redesignedController = [[%c(YTVideoQualitySwitchRedesignedController) alloc] initWithServiceRegistryScope:nil parentResponder:nil];
@@ -801,16 +795,13 @@ static BOOL isDarkMode(UIView *view) {
     NSArray <MLFormat *> *newFormats = [self.redesignedController respondsToSelector:@selector(addRestrictedFormats:)] ? [self.redesignedController addRestrictedFormats:formats] : formats;
     %orig(newFormats);
 }
-
 - (void)dealloc {
     self.redesignedController = nil;
     %orig;
 }
-
 %end
 
 %hook YTMenuController
-
 - (NSMutableArray <YTActionSheetAction *> *)actionsForRenderers:(NSMutableArray <YTIMenuItemSupportedRenderers *> *)renderers fromView:(UIView *)fromView entry:(id)entry shouldLogItems:(BOOL)shouldLogItems firstResponder:(id)firstResponder {
     NSUInteger index = [renderers indexOfObjectPassingTest:^BOOL(YTIMenuItemSupportedRenderers *renderer, NSUInteger idx, BOOL *stop) {
         YTIMenuItemSupportedRenderersElementRendererCompatibilityOptionsExtension *extension = (YTIMenuItemSupportedRenderersElementRendererCompatibilityOptionsExtension *)[renderer.elementRenderer.compatibilityOptions messageForFieldNumber:396644439];
@@ -829,7 +820,6 @@ static BOOL isDarkMode(UIView *view) {
     }
     return actions;
 }
-
 %end
 %end
 
@@ -1054,7 +1044,6 @@ static BOOL isDarkMode(UIView *view) {
 }
 %end
 
-/* Needs to make the settings for this first 
 // Startup Tab
 BOOL isTabSelected = NO;
 %hook YTPivotBarViewController
@@ -1062,119 +1051,72 @@ BOOL isTabSelected = NO;
     %orig;
     if (!isTabSelected) {
         NSArray *pivotIdentifiers = @[@"FEwhat_to_watch", @"FEshorts", @"FEsubscriptions", @"FElibrary"];
-        [self selectItemWithPivotIdentifier:pivotIdentifiers[ytlInt(@"pivotIndex")]]; // Set int here
-        isTabSelected = YES; // will need to setup the settings
+        [self selectItemWithPivotIdentifier:pivotIdentifiers[INTFORVAL(DefaultTab)]]; // Set int here
+        isTabSelected = YES;
     }
 }
 %end
-*/
 
 // IAmYouTube (https://github.com/PoomSmart/IAmYouTube)
 %hook YTVersionUtils
-
-+ (NSString *)appName {
-    return YT_NAME;
-}
-
-+ (NSString *)appID {
-    return YT_BUNDLE_ID;
-}
-
++ (NSString *)appName { return YT_NAME; }
++ (NSString *)appID { return YT_BUNDLE_ID; }
 %end
 
 %hook GCKBUtils
-
-+ (NSString *)appIdentifier {
-    return YT_BUNDLE_ID;
-}
-
++ (NSString *)appIdentifier { return YT_BUNDLE_ID; }
 %end
 
 %hook GPCDeviceInfo
-
-+ (NSString *)bundleId {
-    return YT_BUNDLE_ID;
-}
-
++ (NSString *)bundleId { return YT_BUNDLE_ID; }
 %end
 
 %hook OGLBundle
-
-+ (NSString *)shortAppName {
-    return YT_NAME;
-}
-
++ (NSString *)shortAppName { return YT_NAME; }
 %end
 
 %hook GVROverlayView
-
-+ (NSString *)appName {
-    return YT_NAME;
-}
-
++ (NSString *)appName { return YT_NAME; }
 %end
 
 %hook OGLPhenotypeFlagServiceImpl
-
-- (NSString *)bundleId {
-    return YT_BUNDLE_ID;
-}
-
+- (NSString *)bundleId { return YT_BUNDLE_ID; }
 %end
 
 %hook APMAEU
-
-+ (BOOL)isFAS {
-    return YES;
-}
-
++ (BOOL)isFAS { return YES; }
 %end
 
 %hook GULAppEnvironmentUtil
-
-+ (BOOL)isFromAppStore {
-    return YES;
-}
-
++ (BOOL)isFromAppStore { return YES; }
 %end
 
 %hook SSOClientLogin
-
-+ (NSString *)defaultSourceString {
-    return YT_BUNDLE_ID;
-}
-
++ (NSString *)defaultSourceString { return YT_BUNDLE_ID; }
 %end
 
 %hook SSOConfiguration
-
 - (id)initWithClientID:(id)clientID supportedAccountServices:(id)supportedAccountServices {
     self = %orig;
     [self setValue:YT_NAME forKey:@"_shortAppName"];
     [self setValue:YT_BUNDLE_ID forKey:@"_applicationIdentifier"];
     return self;
 }
-
 %end
 
 %hook YTHotConfig
-
 - (BOOL)clientInfraClientConfigIosEnableFillingEncodedHacksInnertubeContext { return NO; }
-
 %end
 
 %hook NSBundle
-
 + (NSBundle *)bundleWithIdentifier:(NSString *)identifier {
     if ([identifier isEqualToString:YT_BUNDLE_ID])
         return NSBundle.mainBundle;
     return %orig(identifier);
 }
-
 - (NSString *)bundleIdentifier {
     return [self isEqual:NSBundle.mainBundle] ? YT_BUNDLE_ID : %orig;
 }
-
 - (NSDictionary *)infoDictionary {
     NSDictionary *dict = %orig;
     if (![self isEqual:NSBundle.mainBundle])
@@ -1185,7 +1127,6 @@ BOOL isTabSelected = NO;
     if (info[@"CFBundleName"]) info[@"CFBundleName"] = YT_NAME;
     return info;
 }
-
 - (id)objectForInfoDictionaryKey:(NSString *)key {
     if (![self isEqual:NSBundle.mainBundle])
         return %orig;
@@ -1195,7 +1136,6 @@ BOOL isTabSelected = NO;
         return YT_NAME;
     return %orig;
 }
-
 %end
 
 // AccessGroupID
@@ -1270,14 +1210,12 @@ BOOL isTabSelected = NO;
 // YTSlientVote (https://github.com/PoomSmart/YTSilentVote)
 %group SlientVote
 %hook YTInnerTubeResponseWrapper
-
 - (id)initWithResponse:(id)response cacheContext:(id)arg2 requestStatistics:(id)arg3 mutableSharedData:(id)arg4 {
     if ([response isKindOfClass:YTILikeResponseClass]
         || [response isKindOfClass:YTIDislikeResponseClass]
         || [response isKindOfClass:YTIRemoveLikeResponseClass]) return nil;
     return %orig;
 }
-
 %end
 %end
 
@@ -1288,7 +1226,6 @@ BOOL isTabSelected = NO;
     NSString *cachePath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject;
     [[NSFileManager defaultManager] removeItemAtPath:cachePath error:nil];
 }
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     BOOL result = %orig;
     if (IS_ENABLED(AutoClearCache)) {
@@ -1299,7 +1236,6 @@ BOOL isTabSelected = NO;
     }
     return result;
 }
-
 %end
 
 %ctor {

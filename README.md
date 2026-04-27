@@ -1,7 +1,5 @@
 # YouMod
-**Progress: Around 95% of the features have been implemented.** (Not counting from feature requests)
-
-A tweak that's try to recreate features like in YTLite as much as possible. (Not all of them) Contributors are welcome! ^^
+A tweak that's try to recreate features like in YTLite as much as possible. Contributors are welcome! ^^
 
 If you want to contribute this project, scroll down below for how to do it.
 ## Why I created this project?
@@ -40,3 +38,9 @@ Up to the latest, this is the goal of this tweak. Any versions starting from 19.
 
 ## License
 This project uses GPLv3 license. See [LICENSE](https://github.com/Tonwalter888/YouMod/blob/main/LICENSE) for more details.
+
+## Credits
+- [YTLite](https://github.com/dayanch96/YTLite) - dayanch96
+- [uYouEnhanced](https://github.com/arichornlover/uYouEnhanced) - arichornlover
+- [YTweaks](https://github.com/fosterbarnes/YTweaks) - fosterbarnes
+- And [PoomSmart](https://github.com/PoomSmart)'s tweaks

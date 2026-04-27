@@ -41,6 +41,19 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     return [formatter stringFromByteCount:folderSize];
 }
 
+// Default tab icon helper
+static UIImage *getIcon(int num) {
+    YTIIcon *icon = [%c(YTIIcon) new];
+    icon.iconType = num;
+    if ([icon respondsToSelector:@selector(iconImageWithColor:)]) {
+        return [icon iconImageWithColor:[%c(YTColor) white1]];
+    }
+    if ([icon respondsToSelector:@selector(iconImageWithSelected:)]) {
+        return [icon iconImageWithSelected:NO];
+    }
+    return nil;
+}
+
 // Settings Search Bar
 %hook YTSettingsViewController
 - (void)loadWithModel:(id)model fromView:(UIView *)view {
@@ -998,18 +1011,15 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         }];
     [sectionItems addObject:tabbar];
 
-    /* Default tab - Later
-    YTSettingsSectionItem *hideshortsself = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_SHORTS_SHELF")
-        titleDescription:LOC(@"HIDE_SHORTS_SHELF_DESC")
-        accessibilityIdentifier:nil
-        switchOn:IS_ENABLED(HideShortsShelf)
-        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
-            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideShortsShelf];
-            return YES;
-        }
-        settingItemId:0];
-    [sectionItems addObject:hideshortsself];
-    */
+    // Default tab
+    YTSettingsSectionItem *defaulttab = [YTSettingsSectionItemClass itemWithTitle:LOC(@"DEFAULT_TAB")
+        titleDescription:nil
+        accessibilityIdentifier:@"YouModDefaultStartupTabBar"
+        detailTextBlock:nil
+        selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
+            return NO;
+        }];
+    [sectionItems addObject:defaulttab];
 
     // Hide tab indicators
     YTSettingsSectionItem *hidetabindi = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_TAB_INDI")
@@ -1130,7 +1140,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         settingItemId:0];
     [sectionItems addObject:areyouthere];
 
-     // Fixes Slow Miniplayer
+    // Fixes Slow Miniplayer
     YTSettingsSectionItem *slowMiniplayer = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"FIXES_SLOW_MINIPLAYER")
         titleDescription:LOC(@"FIXES_SLOW_MINIPLAYER_DESC") // works only in old yt
         accessibilityIdentifier:nil
@@ -1202,8 +1212,6 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         settingItemId:0];
     [sectionItems addObject:hidelikedislikevotes];
 
-    // More coming soon... (Almost done)
-
     if ([settingsViewController respondsToSelector:@selector(setSectionItems:forCategory:title:icon:titleDescription:headerHidden:)]) {
         YTIIcon *icon = [%c(YTIIcon) new];
         icon.iconType = YT_TUNE;
@@ -1218,6 +1226,61 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         return;
     }
     %orig;
+}
+
+%end
+
+%hook YTSettingsCell
+
+- (void)layoutSubviews {
+    %orig;
+    if ([self.accessibilityIdentifier isEqualToString:@"YouModDefaultStartupTabBar"]) {
+        UISegmentedControl *segment = [self.contentView viewWithTag:888852];
+        if (!segment) {
+            // Home, Shorts, Subscriptions, Library icon numbers
+            NSArray *iconList = @[@(65), @(769), @(66), @(61)]; 
+            
+            segment = [[UISegmentedControl alloc] initWithItems:@[@"", @"", @"", @""]];
+            segment.tag = 888852;
+
+            // Add icons from YTIIcon
+            for (int i = 0; i < iconList.count; i++) {
+                UIImage *iconImage = getIcon([iconList[i] intValue]);
+                if (iconImage) {
+                    [segment setImage:iconImage forSegmentAtIndex:i];
+                }
+            }
+
+            segment.selectedSegmentIndex = [[NSUserDefaults standardUserDefaults] integerForKey:DefaultTab];
+            [segment addTarget:self action:@selector(YouModStartupTabChanged:) forControlEvents:UIControlEventValueChanged];
+            
+            segment.backgroundColor = [UIColor colorWithRed:0.13 green:0.13 blue:0.13 alpha:1.0];
+            // A slightly lighter grey for the active selection
+            segment.selectedSegmentTintColor = [UIColor colorWithRed:0.25 green:0.25 blue:0.25 alpha:1.0];
+            segment.tintColor = [UIColor whiteColor];
+
+            // Add a slight corner radius
+            segment.layer.cornerRadius = 8.0;
+            segment.clipsToBounds = YES;
+            
+            segment.translatesAutoresizingMaskIntoConstraints = NO;
+            [self.contentView addSubview:segment];
+            
+            [NSLayoutConstraint activateConstraints:@[
+                [segment.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:16],
+                [segment.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16],
+                [segment.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-12],
+                [segment.heightAnchor constraintEqualToConstant:36]
+            ]];
+        }
+        return;
+    }
+}
+
+%new
+- (void)YouModStartupTabChanged:(UISegmentedControl *)sender {
+    [[NSUserDefaults standardUserDefaults] setInteger:sender.selectedSegmentIndex forKey:DefaultTab];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 %end

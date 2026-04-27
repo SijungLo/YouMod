@@ -34,8 +34,10 @@
 #import <YouTubeHeader/YTSearchableSettingsViewController.h>
 #import <YouTubeHeader/YTSettingsSectionItemManager.h>
 #import <YouTubeHeader/YTSettingsViewController.h>
+#import <YouTubeHeader/YTSettingsCell.h>
 #import <YouTubeHeader/YTToastResponderEvent.h>
 #import <YouTubeHeader/YTUIUtils.h>
+#import <YouTubeHeader/YTColor.h>
 
 #define IS_ENABLED(k) [[NSUserDefaults standardUserDefaults] boolForKey:k]
 #define INTFORVAL(v) [[NSUserDefaults standardUserDefaults] integerForKey:v]
@@ -102,6 +104,7 @@
 #define EnablesShortsQuality @"YouModEnablesShortsQuality"
 #define ShowShortsSeekbar @"YouModShowShortsSeekbar"
 // Tab bar
+#define DefaultTab @"YouModDefaultStartupTab"
 #define HideTabIndi @"YouModHideTabIndicators"
 #define HideTabLabels @"YouModHideTabLabels"
 #define HideHomeTab @"YouModHideHomeTab"
@@ -149,9 +152,9 @@
 - (void)confirmAlertDidPressConfirm;
 @end
 
-// @interface YTPivotBarViewController : UIViewController
-// - (void)selectItemWithPivotIdentifier:(id)pivotIndentifier;
-// @end
+@interface YTPivotBarViewController : UIViewController
+- (void)selectItemWithPivotIdentifier:(id)pivotIndentifier;
+@end
 
 @interface YTPlayerViewController (YouMod)
 - (void)YouModAutoFullscreen;
@@ -193,8 +196,4 @@
 - (void)exportYouModSettingsFromVC:(UIViewController *)vc;
 - (void)importYouModSettingsFromVC:(UIViewController *)vc;
 - (void)restoreYouModDefaults;
-@end
-
-@interface YTColor : UIColor
-+ (UIColor *)blackPure;
 @end

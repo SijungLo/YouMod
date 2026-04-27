@@ -1,4 +1,5 @@
 #import "Headers.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h> // For import
 
 #define Prefix @"YouMod"
 
@@ -30,9 +31,20 @@ static NSBundle *YouModBundle() {
 
 // Import
 - (void)importYouModSettingsFromVC:(UIViewController *)vc {
-    UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"com.apple.property-list", @"public.item"] inMode:UIDocumentPickerModeImport];
+    NSArray<UTType *> *types = @[UTTypePropertyList, UTTypeData];
+
+    // Modern constructor for iOS 14+
+    UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:types asCopy:YES];
     picker.delegate = self;
     picker.modalPresentationStyle = UIModalPresentationFormSheet;
+
+    // Ensure it looks right on iPad
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        picker.popoverPresentationController.sourceView = vc.view;
+        picker.popoverPresentationController.sourceRect = CGRectMake(vc.view.bounds.size.width/2, vc.view.bounds.size.height/2, 0, 0);
+        picker.popoverPresentationController.permittedArrowDirections = 0;
+    }
+    
     [vc presentViewController:picker animated:YES completion:nil];
 }
 
