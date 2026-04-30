@@ -1,5 +1,6 @@
 // All Codes are adapt from YTLite and uYouEnhanced + Some of my research
 #import "Headers.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 Class YTILikeResponseClass, YTIDislikeResponseClass, YTIRemoveLikeResponseClass;
 

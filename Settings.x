@@ -205,7 +205,9 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    navbargroup.settingIcon = 60;
+    YTIIcon *icon = [%c(YTIIcon) new];
+    icon.iconType = 60;
+    navbargroup.settingIcon = icon;
     [sectionItems addObject:navbargroup];
 
     // Section 3
@@ -225,7 +227,9 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    feedgroup.settingIcon = 193;
+    YTIIcon *icon = [%c(YTIIcon) new];
+    icon.iconType = 193;
+    feedgroup.settingIcon = icon;
     [sectionItems addObject:feedgroup];
 
     // Section 4
@@ -268,7 +272,9 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    playergroup.settingIcon = 658;
+    YTIIcon *icon = [%c(YTIIcon) new];
+    icon.iconType = 658;
+    playergroup.settingIcon = icon;
     [sectionItems addObject:playergroup];
 
     // Section 5
@@ -296,7 +302,9 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    shortsgroup.settingIcon = 769;
+    YTIIcon *icon = [%c(YTIIcon) new];
+    icon.iconType = 769;
+    shortsgroup.settingIcon = icon;
     [sectionItems addObject:shortsgroup];
 
     // Section 6
@@ -357,7 +365,9 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    tabgroup.settingIcon = 66;
+    YTIIcon *icon = [%c(YTIIcon) new];
+    icon.iconType = 66;
+    tabgroup.settingIcon = icon;
     [sectionItems addObject:tabgroup];
 
     // Section 7
@@ -379,7 +389,9 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    othergroup.settingIcon = 1101;
+    YTIIcon *icon = [%c(YTIIcon) new];
+    icon.iconType = 1101;
+    othergroup.settingIcon = icon;
     [sectionItems addObject:othergroup];
 
     // Section 8
@@ -455,7 +467,9 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    perfgroup.settingIcon = 530;
+    YTIIcon *icon = [%c(YTIIcon) new];
+    icon.iconType = 530;
+    perfgroup.settingIcon = icon;
     [sectionItems addObject:perfgroup];
 
     if ([settingsViewController respondsToSelector:@selector(setSectionItems:forCategory:title:icon:titleDescription:headerHidden:)]) {

@@ -173,7 +173,9 @@ typedef NS_ENUM(NSUInteger, GestureSection) {
 - (void)selectItemWithPivotIdentifier:(id)pivotIndentifier;
 @end
 
-@interface YTPlayerViewController (YouMod)
+@interface YTPlayerViewController (YouMod) <UIGestureRecognizerDelegate>
+@property (nonatomic, retain) UIPanGestureRecognizer *YouModPanGesture;
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
 - (void)YouModAutoFullscreen;
 @end
 
@@ -220,11 +222,6 @@ typedef NS_ENUM(NSUInteger, GestureSection) {
 @end
 
 @interface YTFineScrubberFilmstripCollectionView : UICollectionView
-@end
-
-@interface YTPlayerViewController (YouMod) <UIGestureRecognizerDelegate>
-@property (nonatomic, retain) UIPanGestureRecognizer *YouModPanGesture;
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
 @end
 
 @interface YTWatchFullscreenViewController : YTMultiSizeViewController
