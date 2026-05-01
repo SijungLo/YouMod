@@ -459,17 +459,8 @@
     if (IS_ENABLED(OldQualityPicker)) {
         %init(OldVideoQuality);
     }
-    if (IS_ENABLED(HideLikeDislikeVotes)) {
-        %init(SlientVote);
-    }
-    if (IS_ENABLED(OLEDKeyboard)) {
-        %init(OLEDKeyboard);
-    }
     if (IS_ENABLED(ExtraSpeed)) {
         %init(Speed);
-    }
-    if (IS_ENABLED(BackgroundPlayback)) {
-        %init(BackgroundPlayback);
     }
     if (IS_ENABLED(HidePaidPromoOverlay)) {
         %init(PaidPromoOverlay);
