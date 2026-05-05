@@ -101,7 +101,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
 
     // Tweak Version (at the top)
     // Thanks to the original codes from YTweaks by fosterbarnes - https://github.com/fosterbarnes/YTweaks/blob/e921591a89b87256a2b37c4788bd99282f70d9c2/Settings.x
-    YTSettingsSectionItem *tweakVersion = [YTSettingsSectionItemClass itemWithTitle:@"YouMod v1.2.3"
+    YTSettingsSectionItem *tweakVersion = [YTSettingsSectionItemClass itemWithTitle:@"YouMod v1.3.0"
         titleDescription:nil
         accessibilityIdentifier:nil
         detailTextBlock:nil
@@ -178,6 +178,24 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     [sectionItems addObject:settings];
 
     // Section 1
+    // Downloading
+    YTSettingsSectionItem *downloadinggroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"DOWNLOADING") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
+        NSArray <YTSettingsSectionItem *> *rows = @[
+            SETTINGS_HEADER,
+            BASIC_SWITCH(LOC(@"DOWNLOAD_MANAGER"), LOC(@"DOWNLOAD_MANAGER_DESC"), DownloadManager),
+            BASIC_SWITCH(LOC(@"DOWNLOAD_SAVE_PHOTOS"), LOC(@"DOWNLOAD_SAVE_PHOTOS_DESC"), DownloadSaveToPhotos),
+            BASIC_SWITCH(LOC(@"DOWNLOAD_DRC_AUDIO"), LOC(@"DOWNLOAD_DRC_AUDIO"), DownloadPreferDRCAudio),
+        ];
+        YTSettingsPickerViewController *picker = [[%c(YTSettingsPickerViewController) alloc] initWithNavTitle:LOC(@"DOWNLOADING") pickerSectionTitle:nil rows:rows selectedItemIndex:0 parentResponder:[self parentResponder]];
+        [settingsViewController pushViewController:picker];
+        return YES;
+    }];
+    YTIIcon *downloadIcon = [%c(YTIIcon) new];
+    downloadIcon.iconType = 57;
+    downloadinggroup.settingIcon = downloadIcon;
+    [sectionItems addObject:downloadinggroup];
+
+    // Section 2
     // Appearance
     YTSettingsSectionItem *appergroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"APPEARANCE") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
         NSArray <YTSettingsSectionItem *> *rows = @[
@@ -194,7 +212,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     appergroup.settingIcon = icon0;
     [sectionItems addObject:appergroup];
 
-    // Section 2
+    // Section 3
     // Navigation bar
     YTSettingsSectionItem *navbargroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"NAVBAR") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
         NSArray <YTSettingsSectionItem *> *rows = @[
@@ -215,7 +233,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     navbargroup.settingIcon = icon1;
     [sectionItems addObject:navbargroup];
 
-    // Section 3
+    // Section 4
     // Feed
     YTSettingsSectionItem *feedgroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"FEED") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
         NSArray <YTSettingsSectionItem *> *rows = @[
@@ -238,7 +256,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     feedgroup.settingIcon = icon2;
     [sectionItems addObject:feedgroup];
 
-    // Section 4
+    // Section 5
     // Player
     YTSettingsSectionItem *playergroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"PLAYER") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
         NSArray <YTSettingsSectionItem *> *rows = @[
@@ -393,7 +411,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     playergroup.settingIcon = icon3;
     [sectionItems addObject:playergroup];
 
-    // Section 5
+    // Section 6
     // Shorts
     YTSettingsSectionItem *shortsgroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"SHORTS") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
         NSArray <YTSettingsSectionItem *> *rows = @[
@@ -424,7 +442,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     shortsgroup.settingIcon = icon4;
     [sectionItems addObject:shortsgroup];
 
-    // Section 6
+    // Section 7
     // Tab bar
     YTSettingsSectionItem *tabgroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"TABBAR") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
         NSArray <YTSettingsSectionItem *> *rows = @[
@@ -476,7 +494,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     tabgroup.settingIcon = icon5;
     [sectionItems addObject:tabgroup];
 
-    // Section 7
+    // Section 8
     // Miscellaneous
     YTSettingsSectionItem *othergroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"MISCELLANEOUS") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
         NSArray <YTSettingsSectionItem *> *rows = @[
@@ -501,7 +519,7 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     othergroup.settingIcon = icon6;
     [sectionItems addObject:othergroup];
 
-    // Section 8
+    // Section 9
     // Perferences
     YTSettingsSectionItem *perfgroup = [YTSettingsSectionItemClass itemWithTitle:LOC(@"PERFER_HEADER") accessibilityIdentifier:nil detailTextBlock:nil selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
         NSArray <YTSettingsSectionItem *> *rows = @[
@@ -606,6 +624,8 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         HideCastButtonPlayer: @YES,
         BackgroundPlayback: @YES,
         OldQualityPicker: @YES,
+        DownloadManager: @YES,
+        DownloadSaveToPhotos: @YES,
     }];
     %init;
 }
